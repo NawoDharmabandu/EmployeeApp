@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NebulaApp.Models;
+using NebulaApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<NebulaDbContext>(options =>
    options.UseSqlServer(builder.Configuration.GetConnectionString("NebulaDbContext")));
+
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 var app = builder.Build();
 app.UseCors(policy => policy.AllowAnyHeader()

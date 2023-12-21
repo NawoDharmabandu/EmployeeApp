@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NebulaApp.Models;
 
@@ -11,9 +12,11 @@ using NebulaApp.Models;
 namespace NebulaApp.Migrations
 {
     [DbContext(typeof(NebulaDbContext))]
-    partial class NebulaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231221101936_v6")]
+    partial class v6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,31 @@ namespace NebulaApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("NebulaApp.Models.Address", b =>
+                {
+                    b.Property<int>("AddressID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressID"));
+
+                    b.Property<string>("AddressLine1")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("AddressLine2")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("PostCode")
+                        .HasColumnType("varchar(250)");
+
+                    b.HasKey("AddressID");
+
+                    b.ToTable("Addresses");
+                });
 
             modelBuilder.Entity("NebulaApp.Models.Employee", b =>
                 {
@@ -30,8 +58,8 @@ namespace NebulaApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpID"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("varchar(500)");
+                    b.Property<int>("AddressID")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("BasicSalary")
                         .HasColumnType("decimal(38, 2)");
@@ -61,7 +89,25 @@ namespace NebulaApp.Migrations
 
                     b.HasKey("EmpID");
 
+                    b.HasIndex("AddressID");
+
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("NebulaApp.Models.Employee", b =>
+                {
+                    b.HasOne("NebulaApp.Models.Address", "Address")
+                        .WithMany("Employees")
+                        .HasForeignKey("AddressID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("NebulaApp.Models.Address", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

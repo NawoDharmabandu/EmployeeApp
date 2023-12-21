@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NebulaApp.Models;
 
@@ -11,9 +12,11 @@ using NebulaApp.Models;
 namespace NebulaApp.Migrations
 {
     [DbContext(typeof(NebulaDbContext))]
-    partial class NebulaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231221135954_v7")]
+    partial class v7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,6 +34,7 @@ namespace NebulaApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpID"));
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("varchar(500)");
 
                     b.Property<decimal?>("BasicSalary")
