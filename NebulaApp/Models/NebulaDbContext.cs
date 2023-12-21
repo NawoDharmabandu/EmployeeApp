@@ -15,13 +15,6 @@ namespace NebulaApp.Models
 
         public DbSet<Employee> Employees { get; set; }
 
-        public DbSet<Address> Addresses { get; set; }
 
-        public DbSet<Department> Departments { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-OUREU1H\\SQLEXPRESS;Initial Catalog=NebulaDB;User ID=sa;Password=1234; Trust Server Certificate=True");
-        }
     }
 }

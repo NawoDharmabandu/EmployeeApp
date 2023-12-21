@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import axios from "axios";
 
 
 const Employee = () =>{
@@ -61,9 +62,26 @@ const Employee = () =>{
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        setData(empData)
+        getAllEmployees();
     }, [])
 
+    const getAllEmployees = () =>{
+        axios.get('https://localhost:44374/api/Employee')
+        .then((result)=>{
+            setData(result.data)
+        })
+        .catch((error) =>{
+            console.log(error)
+        })
+    }
+
+    const DepartmentEnum = {
+        IT: 'IT',
+        HR: 'HR',
+        Finance: 'Finance',
+        Marketing: 'Marketing'
+      };
+    
     return(
         <Fragment>
             <Container>
@@ -101,40 +119,45 @@ const Employee = () =>{
             </Container>
             <br></br>
 
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                    <th>#</th>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>IsActive</th>
-                    <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        data && data.length > 0?
-                        data.map((item,index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.id}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.age}</td>
-                                    <td>{item.isActive}</td>
-                                    <td colSpan={2}>
-                                        <button className="btn btn-primary" onClick={()=> handleEdit(item.id)}>Edit</button> &nbsp;
-                                        <button className="btn btn-danger" onClick={()=> handleDelete(item.id)}>Delete</button>
-                                    </td>
-                                </tr>
-                            )
-                        })
-                        :
-                        'Loading...'
-                    }
-                </tbody>
-            </Table>
+            {data && data.length > 0 ? (
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+						<th>#</th>
+						<th>Id</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Gender</th>
+						<th>Date Of Birth</th>
+						<th>Basic Salary</th>
+						<th>Department</th>
+						<th>Address</th>
+                        <th>Actions</th>
+						</tr>
+                    </thead>
+                    <tbody>
+                        {data.map((item, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{item.EmpID}</td>
+                                <td>{item.FirstName}</td>
+                                <td>{item.LastName}</td>
+                                <td>{item.Gender}</td>
+                                <td>{item.DateOfBirth}</td>
+                                <td>{item.BasicSalary}</td>
+                                <td>{DepartmentEnum[item.DepartmentID]}</td>
+                                <td>{item.Address}</td>
+                                <td colSpan={2}>
+                                    <button className="btn btn-primary" onClick={() => handleEdit(item.id)}>Edit</button> &nbsp;
+                                    <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            ) : (
+                <p>Loading...</p>
+            )}
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>

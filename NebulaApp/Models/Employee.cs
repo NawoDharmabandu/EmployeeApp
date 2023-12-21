@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
+using static NebulaApp.Models.Enum;
 
 namespace NebulaApp.Models
 {
@@ -26,15 +27,15 @@ namespace NebulaApp.Models
         [Column(TypeName = "decimal(38, 2)")]
         public decimal? BasicSalary { get; set; }
 
-        [Column(TypeName = "int")]
-        public int DepartmentID { get; set; }
+        public DepartmentEnum DepartmentID { get; set; }
 
-        [Column(TypeName = "int")]
-        public int AddressID { get; set; }
+        [Column(TypeName = "varchar(500)")]
+        public string? Address { get; set; }
 
-        // Navigation properties
-        //public virtual Department? Department { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime CreatedDate { get; set; }
 
-        //public virtual Address? Address { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? ModifiedDate { get; set; }
     }
 }
