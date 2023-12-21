@@ -13,7 +13,7 @@ namespace NebulaApp.Services
         {
             _employeeContext = employeeContext;
         }
-        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployee()
+        public async Task<IEnumerable<Employee>> GetAllEmployee()
         {
             return await _employeeContext.Employees.ToListAsync();
         }
